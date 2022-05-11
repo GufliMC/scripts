@@ -12,3 +12,7 @@ javadoc {
     classpath = files(javadocProjects.collect(p -> p.sourceSets.main.compileClasspath))
     destinationDir = file("${buildDir}/docs/javadoc")
 }
+
+subprojects {
+    javadoc.enabled = false
+}

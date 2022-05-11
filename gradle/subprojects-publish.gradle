@@ -3,12 +3,10 @@ apply plugin: 'java'
 def publishProjects = ext.find("publishProjects");
 if ( publishProjects == null ) {
 	publishProjects = subprojects.stream()
-		.filter(p -> p.name.contains('-api'))
-		.toList()
+		.filter(p -> p.name.contains('api'))
+		.toArray()
 }
 
-
-// java library & maven publish for api subprojects
 configure(publishProjects) {
     apply plugin: 'maven-publish'
     
