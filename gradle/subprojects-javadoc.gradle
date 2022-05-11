@@ -1,0 +1,14 @@
+apply plugin: 'java'
+
+def javadocProjects = ext.find("javadocProjects");
+if ( javadocProjects == null ) {
+    javadocProjects = subprojects.stream()
+            .filter(p -> p.name.contains('api'))
+            .toArray()
+}
+
+javadoc {
+    source javadocProjects.collect(p -> p.sourceSets.main.allJava)
+    classpath = files(javadocProjects.collect(p -> p.sourceSets.main.compileClasspath))
+    destinationDir = file("${buildDir}/docs/javadoc")
+}
