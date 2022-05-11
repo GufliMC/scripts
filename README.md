@@ -12,4 +12,4 @@ This repository contains a collection of scripts. They can be remotely accessed 
 
 
 ### Template build files
-* [example build.gradle with shadowJar](https://guflimc.github.io/scripts/gradle/shadow.build.gradle)
+* [standard build.gradle with shadowJar](https://guflimc.github.io/scripts/gradle/standard.build.gradle)

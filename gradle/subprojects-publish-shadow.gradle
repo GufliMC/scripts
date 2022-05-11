@@ -1,0 +1,29 @@
+apply plugin: 'java'
+
+def publishProjects = ext.find("publishProjects");
+if ( publishProjects == null ) {
+	publishProjects = subprojects.stream()
+		.filter(p -> p.name.contains('api'))
+		.toArray()
+}
+
+configure(publishProjects) {
+    apply plugin: 'maven-publish'
+    
+    publishing {
+        repositories {
+            maven {
+                name = "Jorisg"
+                url = uri("https://repo.jorisg.com/snapshots")
+                credentials(org.gradle.api.credentials.PasswordCredentials)
+            }
+        }
+
+        publications {
+            snapshot(MavenPublication) { publication ->
+                project.shadow.component(publication)
+                artifactId = project.name
+            }
+        }
+    }
+}

@@ -11,21 +11,19 @@ ext.set("javadocProjects", javadocProjects)
 def publishProjects = [project(':api'), ...]
 ext.set("publishProjects", publishProjects)
 
-// jars that will be published need to include subproject api's
-configure(publishProjects) {
+subprojects {
     apply plugin: 'java'
-    apply plugin: 'com.github.johnrengelman.shadow'
 
-    // configure shadow jar
-    shadowJar {
-        archiveClassifier.set("")
-        archiveAppendix.set("${project.name}")
-        archiveBaseName.set("${rootProject.name}")
+    repositories {
+        ...
     }
 
-    jar.enabled = false
+     dependencies {
+         ...
+     }
 }
 
 apply from: 'https://guflimc.github.io/scripts/gradle/subprojects-default.gradle'
 apply from: 'https://guflimc.github.io/scripts/gradle/subprojects-javadoc.gradle'
-apply from: 'https://guflimc.github.io/scripts/gradle/subprojects-publish.gradle'
+apply from: 'https://guflimc.github.io/scripts/gradle/subprojects-shadow.gradle'
+apply from: 'https://guflimc.github.io/scripts/gradle/subprojects-publish-shadow.gradle'
