@@ -1,0 +1,27 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '7.1.2' apply false
+}
+
+group '<group>'
+version '1.0-SNAPSHOT'
+
+ext.set("javadocProjects", [project(':api'), ...])
+ext.set("publishProjects", [project(':api'), ...])
+
+apply from: 'https://guflimc.github.io/scripts/gradle/subprojects-default.gradle'
+apply from: 'https://guflimc.github.io/scripts/gradle/subprojects-javadoc.gradle'
+apply from: 'https://guflimc.github.io/scripts/gradle/subprojects-publish.gradle'
+
+subprojects {
+    apply plugin: 'com.github.johnrengelman.shadow'
+
+    // configure shadow jar
+    shadowJar {
+        archiveClassifier.set("")
+        archiveAppendix.set("${project.name}")
+        archiveBaseName.set("${rootProject.name}")
+    }
+
+    // disable default jar task
+    jar.enabled = false
+}
