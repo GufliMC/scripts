@@ -1,0 +1,13 @@
+
+def shadowCopy = (Map<Project, String>) ext.find("shadowCopy");
+
+for ( project in shadowCopy.keySet() ) {
+    configure(project) {
+        shadowJar.doLast {
+            copy {
+                from "build/libs/" + archiveFileName.get()
+                into shadowCopy.get(project)
+            }
+        }
+    }
+}
