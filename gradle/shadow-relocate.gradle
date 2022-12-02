@@ -1,5 +1,10 @@
 import java.util.jar.JarFile
 
+def excludeRelocation = ext.find("excludeRelocation");
+if ( excludeRelocation == null ) {
+    excludeRelocation = []
+}
+
 shadowJar {
     def packages = new HashSet<String>()
     project.configurations.runtimeClasspath.files.forEach(jar -> {
@@ -14,6 +19,7 @@ shadowJar {
         }
     })
     packages.removeIf(p -> p.startsWith(project.group.toString()))
+    packages.removeIf(p -> excludeRelocation.stream().anyMatch(p::startsWith))
     for (lib in packages) {
         relocate lib, "${project.group}.lib.${lib}"
     }
