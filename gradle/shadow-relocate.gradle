@@ -8,6 +8,11 @@ if ( excludeRelocation == null ) {
 shadowJar {
     def packages = new HashSet<String>()
     project.configurations.runtimeClasspath.files.forEach(jar -> {
+        if ( project.parent.childProjects.containsKey('api') && project.parent.childProjects.get('api')
+                .configurations.runtimeClasspath.files.contains(jar) ) {
+            return;
+        }
+
         try (JarFile jf = new JarFile(jar)) {
             jf.stream()
                     .map(entry -> entry.name)
