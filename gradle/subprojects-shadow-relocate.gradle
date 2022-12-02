@@ -1,0 +1,22 @@
+import java.util.jar.JarFile
+
+shadowJar {
+//    relocate 'cloud.commandframework', 'com.guflimc.clans.lib.cloud.commandframework'
+
+    def packages = new HashSet<String>()
+    project.configurations.runtimeClasspath.files.forEach(jar -> {
+        try (JarFile jf = new JarFile(jar)) {
+            jf.stream()
+                    .map(entry -> entry.name)
+                    .filter(n -> n != "module-info.class")
+                    .filter(n -> !n.startsWith("META-INF"))
+                    .filter(n -> n.endsWith(".class"))
+                    .map(n -> n.substring(0, n.lastIndexOf('/')).replaceAll('/', '.'))
+                    .forEach(n -> packages.add(n))
+        }
+    })
+    packages.removeIf(p -> p.startsWith(project.group.toString()))
+    for (lib in packages) {
+        relocate lib, "${project.group}.lib.${lib}"
+    }
+}
