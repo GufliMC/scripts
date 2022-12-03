@@ -9,7 +9,7 @@ generateBukkitPluginDescription.doLast {
 
     project.repositories.forEach {
         if (it instanceof MavenArtifactRepository) {
-            lines.add("- " + it.url)
+            lines.add("  " + it.name + ": '" + it.url + "'")
         }
     }
 
