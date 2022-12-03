@@ -1,0 +1,16 @@
+import org.apache.commons.io.FileUtils
+import java.nio.charset.StandardCharsets
+
+generateBukkitPluginDescription.doLast {
+    File file = new File("${buildDir}/generated/plugin-yml/Bukkit/plugin.yml");
+    List<String> lines = FileUtils.readLines(file, StandardCharsets.UTF_8);
+    lines.add("repositories:");
+
+    project.repositories.forEach {
+        if (it instanceof MavenArtifactRepository) {
+            lines.add("- " + it.url)
+        }
+    }
+
+    FileUtils.writeLines(file, lines);
+}
