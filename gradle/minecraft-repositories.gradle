@@ -1,9 +1,10 @@
-import org.apache.commons.io.FileUtils
 import java.nio.charset.StandardCharsets
+import java.nio.file.Files
+import java.nio.file.StandardOpenOption
 
 generateBukkitPluginDescription.doLast {
     File file = new File("${buildDir}/generated/plugin-yml/Bukkit/plugin.yml");
-    List<String> lines = FileUtils.readLines(file, StandardCharsets.UTF_8);
+    List<String> lines = Files.readAllLines(file.toPath())
     lines.add("repositories:");
 
     project.repositories.forEach {
@@ -12,5 +13,5 @@ generateBukkitPluginDescription.doLast {
         }
     }
 
-    FileUtils.writeLines(file, lines);
+    Files.write(file.toPath(), lines, StandardCharsets.UTF_8, StandardOpenOption.WRITE);
 }
