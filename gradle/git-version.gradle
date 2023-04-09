@@ -1,0 +1,4 @@
+def haschanges = "git diff-index HEAD".execute().text.trim().length() > 0
+def revision = "git rev-parse --short HEAD".execute().text.trim()
+
+version = "v-${revision}${haschanges ? '-SNAPSHOT' : ''}"
