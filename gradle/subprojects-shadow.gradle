@@ -6,7 +6,7 @@ if ( shadowProjects == null ) {
 
 configure(shadowProjects) {
     apply plugin: 'java'
-    apply plugin: 'com.github.johnrengelman.shadow'
+    apply plugin: 'com.gradleup.shadow'
 
     // configure shadow jar
     shadowJar {
