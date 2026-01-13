@@ -1,0 +1,35 @@
+name: Gradle publish
+
+on:
+  workflow_call:
+    secrets:
+      JORISG_REPO_USERNAME:
+        required: true
+      JORISG_REPO_PASSWORD:
+        required: true
+    inputs:
+      java_version:
+        type: string
+        default: '25'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ inputs.java_version }}
+          distribution: 'temurin'
+
+      - name: Publish package
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: publish
+        env:
+          ORG_GRADLE_PROJECT_JorisgUsername: ${{ secrets.JORISG_REPO_USERNAME }}
+          ORG_GRADLE_PROJECT_JorisgPassword: ${{ secrets.JORISG_REPO_PASSWORD }}
