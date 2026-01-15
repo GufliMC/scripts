@@ -11,6 +11,11 @@ on:
       java_version:
         type: string
         default: '25'
+    secrets:
+      JORISG_REPO_USERNAME:
+        required: false
+      JORISG_REPO_PASSWORD:
+        required: false
 
 jobs:
   publish:
@@ -24,8 +29,14 @@ jobs:
           java-version: ${{ inputs.java_version }}
           distribution: 'temurin'
 
-      - name: Generate javadoc
-        run: './gradlew javadoc'
+      - name: Gradle Javadoc
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: javadoc
+        env:
+          ORG_GRADLE_PROJECT_JorisgUsername: ${{ secrets.JORISG_REPO_USERNAME }}
+          ORG_GRADLE_PROJECT_JorisgPassword: ${{ secrets.JORISG_REPO_PASSWORD }}
+
       - name: Deploy github pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:

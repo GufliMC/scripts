@@ -6,6 +6,11 @@ on:
       java_version:
         type: string
         default: '25'
+    secrets:
+      JORISG_REPO_USERNAME:
+        required: false
+      JORISG_REPO_PASSWORD:
+        required: false
 
 jobs:
   build:
@@ -19,12 +24,17 @@ jobs:
           java-version: ${{ inputs.java_version }}
           distribution: 'temurin'
 
-      - name: Build with Gradle
-        run: './gradlew shadowJar'
+      - name: Gradle Build
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: shadowJar
+        env:
+          ORG_GRADLE_PROJECT_JorisgUsername: ${{ secrets.JORISG_REPO_USERNAME }}
+          ORG_GRADLE_PROJECT_JorisgPassword: ${{ secrets.JORISG_REPO_PASSWORD }}
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.PROJECT_NAME }}
-          path: 'app/build/libs/*-SNAPSHOT.jar'
+          path: 'app/build/libs/*.jar'
           if-no-files-found: 'error'
